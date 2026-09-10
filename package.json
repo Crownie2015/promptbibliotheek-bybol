@@ -1,0 +1,9 @@
+{
+  "name": "promptbibliotheek-bybol",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactieve promptbibliotheek voor Bybol-cursisten: kies waarvoor je een prompt nodig hebt, beantwoord een paar vragen, en krijg een kant-en-klare AI-prompt.",
+  "engines": {
+    "node": ">=18"
+  }
+}
