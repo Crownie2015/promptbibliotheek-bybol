@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/genereer-prompt.js": {
+      "maxDuration": 60
+    }
+  }
+}

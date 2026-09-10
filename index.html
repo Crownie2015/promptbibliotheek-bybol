@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <title>Promptbibliotheek - Bybol</title>
   <!--HUISSTIJL-START-->
 <style>
@@ -141,6 +142,7 @@ th{font-family:var(--kop); font-size:13px; text-transform:uppercase; letter-spac
       white-space:nowrap}
     .tab:hover{color:var(--navy)}
     .tab[aria-selected="true"]{color:var(--blauw); border-color:var(--blauw)}
+    .tab:focus-visible, .terug:focus-visible{outline:2px solid var(--blauw); outline-offset:2px}
 
     .scherm[hidden]{display:none}
     .vragen-omschrijving{color:var(--bijtekst); margin:-8px 0 20px}
@@ -160,14 +162,14 @@ th{font-family:var(--kop); font-size:13px; text-transform:uppercase; letter-spac
     .terug:hover{text-decoration:underline}
 
     .resultaat-blok{background:var(--navy); color:#fff; border-radius:12px; padding:20px;
-      white-space:pre-wrap; box-sizing:border-box}
+      white-space:pre-wrap; box-sizing:border-box; overflow-wrap:anywhere}
     .uitleg{margin-top:16px; padding:16px; background:var(--vlak); border-radius:8px; color:var(--bijtekst)}
     .hint{color:var(--bijtekst); font-size:.9rem}
 
     .geschiedenis{margin-top:32px; border-top:1px solid var(--rand); padding-top:20px}
     .geschiedenis h2{font-size:1.1rem; color:var(--navy); margin:0 0 12px}
     .geschiedenis ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
-    .geschiedenis li{background:var(--vlak); border-radius:8px; padding:10px 14px; font-size:.9rem}
+    .geschiedenis li{background:var(--vlak); border-radius:8px; padding:10px 14px; font-size:.9rem; overflow-wrap:anywhere}
 
     .fout{background:#fdecea; color:#9a2f24; border-radius:8px; padding:14px; margin-top:16px}
   </style>

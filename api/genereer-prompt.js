@@ -4,15 +4,24 @@
 
 var OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 var MODEL = 'anthropic/claude-sonnet-4.5';
+var MAX_VELD_LENGTE = 800;
+var MAX_DOEL_LENGTE = 300;
+var MAX_TOKENS = 1500;
+
+function knip(tekst, maxLengte) {
+  var s = String(tekst || '');
+  return s.length > maxLengte ? s.slice(0, maxLengte) : s;
+}
 
 function bouwMetaPrompt(categorie, antwoorden) {
   var veldenTekst = categorie.velden.map(function (v) {
-    return '- ' + v.label + ': ' + antwoorden[v.id];
+    return '- ' + v.label + ': ' + knip(antwoorden[v.id], MAX_VELD_LENGTE);
   }).join('\n');
-  var extra = categorie.extraRegels.join('\n');
+  var doel = knip(categorie.doel, MAX_DOEL_LENGTE);
+  var extra = categorie.extraRegels.map(function (r) { return knip(r, MAX_VELD_LENGTE); }).join('\n');
 
   return 'Je bent een schrijfcoach die een Vlaamse zelfstandige helpt om een goede AI-prompt te schrijven.\n\n' +
-    'Bouw een kant-en-klare prompt die deze persoon zo kan kopiëren en plakken in ChatGPT, Gemini of Claude om ' + categorie.doel + '.\n\n' +
+    'Bouw een kant-en-klare prompt die deze persoon zo kan kopiëren en plakken in ChatGPT, Gemini of Claude om ' + doel + '.\n\n' +
     'Wat de persoon invulde:\n' + veldenTekst + '\n\n' +
     'Regels voor de prompt die je schrijft:\n' +
     '- Schrijf de prompt zelf in de ik-vorm, alsof de zelfstandige aan het woord is, in het Nederlands.\n' +
@@ -78,7 +87,8 @@ module.exports = async function handler(req, res) {
       },
       body: JSON.stringify({
         model: MODEL,
-        messages: [{ role: 'user', content: metaPrompt }]
+        messages: [{ role: 'user', content: metaPrompt }],
+        max_tokens: MAX_TOKENS
       })
     });
 

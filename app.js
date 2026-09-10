@@ -79,6 +79,7 @@
   }
 
   function renderTabs() {
+    var vorigeScroll = tabsEl.scrollLeft;
     tabsEl.innerHTML = '';
     window.CATEGORIEEN.forEach(function (categorie) {
       var tab = document.createElement('button');
@@ -86,10 +87,11 @@
       tab.className = 'tab';
       tab.textContent = categorie.titel;
       tab.setAttribute('role', 'tab');
-      tab.setAttribute('aria-selected', String(huidigeCategorie && huidigeCategorie.id === categorie.id));
+      tab.setAttribute('aria-selected', Boolean(huidigeCategorie && huidigeCategorie.id === categorie.id));
       tab.addEventListener('click', function () { kiesCategorie(categorie.id); });
       tabsEl.appendChild(tab);
     });
+    tabsEl.scrollLeft = vorigeScroll;
   }
 
   function kiesCategorie(id) {
@@ -232,14 +234,22 @@
       body: JSON.stringify({ code: haalOpgeslagenCode(), categorie: actieveCategorie, antwoorden: antwoorden }),
       signal: ctl.signal
     }).then(function (respons) {
-      return respons.json().then(function (data) { return { status: respons.status, data: data }; });
+      return respons.text().then(function (tekst) {
+        var data = null;
+        try {
+          data = tekst ? JSON.parse(tekst) : null;
+        } catch (fout) {
+          data = null;
+        }
+        return { status: respons.status, data: data };
+      });
     }).then(function (uitkomst) {
       if (uitkomst.status === 401) {
         wisOpgeslagenCode();
         toonToegang('Deze code klopt niet meer. Vraag ze opnieuw na en probeer het dan weer.');
         return;
       }
-      if (uitkomst.status !== 200) {
+      if (uitkomst.status !== 200 || !uitkomst.data || typeof uitkomst.data.prompt !== 'string' || typeof uitkomst.data.uitleg !== 'string') {
         toonScherm('vragen');
         toonVragenFout(foutmeldingVoor(uitkomst.data && uitkomst.data.code));
         return;
@@ -266,8 +276,32 @@
     if (!code) {
       return;
     }
-    bewaarCode(code);
-    toonApp();
+    var verstuurKnop = toegangFormEl.querySelector('button[type="submit"]');
+    if (verstuurKnop) {
+      verstuurKnop.disabled = true;
+    }
+    toegangFoutEl.hidden = true;
+
+    fetch('/api/genereer-prompt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code })
+    }).then(function (respons) {
+      if (respons.status === 401) {
+        toegangFoutEl.textContent = 'Deze code klopt niet, vraag ze na bij Bybol.';
+        toegangFoutEl.hidden = false;
+        return;
+      }
+      bewaarCode(code);
+      toonApp();
+    }).catch(function () {
+      toegangFoutEl.textContent = 'Er ging iets mis, controleer je internetverbinding en probeer opnieuw.';
+      toegangFoutEl.hidden = false;
+    }).finally(function () {
+      if (verstuurKnop) {
+        verstuurKnop.disabled = false;
+      }
+    });
   });
 
   vragenFormEl.addEventListener('submit', verstuurAanvraag);
