@@ -6,6 +6,8 @@ var OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 var MODEL = 'anthropic/claude-sonnet-4.5';
 var MAX_VELD_LENGTE = 800;
 var MAX_DOEL_LENGTE = 300;
+var MAX_LABEL_LENGTE = 100;
+var MAX_ITEMS = 20;
 var MAX_TOKENS = 1500;
 
 function knip(tekst, maxLengte) {
@@ -15,7 +17,7 @@ function knip(tekst, maxLengte) {
 
 function bouwMetaPrompt(categorie, antwoorden) {
   var veldenTekst = categorie.velden.map(function (v) {
-    return '- ' + v.label + ': ' + knip(antwoorden[v.id], MAX_VELD_LENGTE);
+    return '- ' + knip(v.label, MAX_LABEL_LENGTE) + ': ' + knip(antwoorden[v.id], MAX_VELD_LENGTE);
   }).join('\n');
   var doel = knip(categorie.doel, MAX_DOEL_LENGTE);
   var extra = categorie.extraRegels.map(function (r) { return knip(r, MAX_VELD_LENGTE); }).join('\n');
@@ -67,6 +69,11 @@ module.exports = async function handler(req, res) {
 
   if (!categorie || typeof categorie.doel !== 'string' || !Array.isArray(categorie.velden) ||
       !Array.isArray(categorie.extraRegels) || !antwoorden) {
+    res.status(400).json({ code: 'ongeldige_aanvraag' });
+    return;
+  }
+
+  if (categorie.velden.length > MAX_ITEMS || categorie.extraRegels.length > MAX_ITEMS) {
     res.status(400).json({ code: 'ongeldige_aanvraag' });
     return;
   }
