@@ -62,6 +62,8 @@
     renderGeschiedenis();
     if (!huidigeCategorie) {
       kiesCategorie(window.CATEGORIEEN[0].id);
+    } else {
+      toonScherm('vragen');
     }
   }
 
