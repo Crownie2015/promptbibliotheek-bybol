@@ -286,7 +286,7 @@
     var tekst = resultaatTekstEl.textContent;
     var origineel = kopieerKnopEl.textContent;
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      kopieerKnopEl.textContent = 'Kopieren lukte niet, selecteer de tekst zelf';
+      kopieerKnopEl.textContent = 'Kopiëren lukte niet, selecteer de tekst zelf';
       setTimeout(function () { kopieerKnopEl.textContent = origineel; }, 2500);
       return;
     }
@@ -294,7 +294,7 @@
       kopieerKnopEl.textContent = 'Gekopieerd!';
       setTimeout(function () { kopieerKnopEl.textContent = origineel; }, 2000);
     }).catch(function () {
-      kopieerKnopEl.textContent = 'Kopieren lukte niet, selecteer de tekst zelf';
+      kopieerKnopEl.textContent = 'Kopiëren lukte niet, selecteer de tekst zelf';
       setTimeout(function () { kopieerKnopEl.textContent = origineel; }, 2500);
     });
   });

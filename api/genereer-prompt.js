@@ -12,7 +12,7 @@ function bouwMetaPrompt(categorie, antwoorden) {
   var extra = categorie.extraRegels.join('\n');
 
   return 'Je bent een schrijfcoach die een Vlaamse zelfstandige helpt om een goede AI-prompt te schrijven.\n\n' +
-    'Bouw een kant-en-klare prompt die deze persoon zo kan kopieren en plakken in ChatGPT, Gemini of Claude om ' + categorie.doel + '.\n\n' +
+    'Bouw een kant-en-klare prompt die deze persoon zo kan kopiëren en plakken in ChatGPT, Gemini of Claude om ' + categorie.doel + '.\n\n' +
     'Wat de persoon invulde:\n' + veldenTekst + '\n\n' +
     'Regels voor de prompt die je schrijft:\n' +
     '- Schrijf de prompt zelf in de ik-vorm, alsof de zelfstandige aan het woord is, in het Nederlands.\n' +
@@ -21,7 +21,7 @@ function bouwMetaPrompt(categorie, antwoorden) {
     '- Gebruik geen Engelse marketingtermen.\n' +
     extra + '\n\n' +
     'Antwoord alleen met een JSON-object met exact deze twee velden, geen andere tekst, geen markdown-codeblok:\n' +
-    '{"prompt": "de volledige prompt, klaar om te kopieren", "uitleg": "2 tot 3 zinnen die uitleggen waarom deze prompt goed werkt, in de toon van een korte tip van een coach, geen vakjargon"}';
+    '{"prompt": "de volledige prompt, klaar om te kopiëren", "uitleg": "2 tot 3 zinnen die uitleggen waarom deze prompt goed werkt, in de toon van een korte tip van een coach, geen vakjargon"}';
 }
 
 function parseModelAntwoord(tekst) {
