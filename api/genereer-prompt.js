@@ -62,7 +62,12 @@ module.exports = async function handler(req, res) {
   var categorie = body.categorie;
   var antwoorden = body.antwoorden;
 
-  if (!process.env.TOEGANGSCODE || code !== process.env.TOEGANGSCODE) {
+  var geldigeCodes = String(process.env.TOEGANGSCODE || '')
+    .split(',')
+    .map(function (c) { return c.trim(); })
+    .filter(Boolean);
+
+  if (geldigeCodes.length === 0 || geldigeCodes.indexOf(code) === -1) {
     res.status(401).json({ code: 'foute_code' });
     return;
   }
