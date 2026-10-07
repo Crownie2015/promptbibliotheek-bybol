@@ -2,3 +2,5 @@
 .env.*
 .vercel
 node_modules/
+# Gesprekslogs van Claude (de Stop-hook schrijft ze in de werkmap) horen nooit in git.
+Gesprekken/
